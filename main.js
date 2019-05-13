@@ -1,8 +1,11 @@
 /*
-**  Nuxt
-*/
+ **  Nuxt
+ */
 const http = require('http')
-const { Nuxt, Builder } = require('nuxt')
+const {
+	Nuxt,
+	Builder
+} = require('nuxt')
 let config = require('./nuxt.config.js')
 config.rootDir = __dirname // for electron-builder
 // Init Nuxt.js
@@ -26,8 +29,8 @@ console.log(`Nuxt working on ${_NUXT_URL_}`)
 
 
 /*
-** Electron
-*/
+ ** Electron
+ */
 let win = null // Current window
 const electron = require('electron')
 const path = require('path')
@@ -40,7 +43,10 @@ const newWin = () => {
 	win.on('closed', () => win = null)
 	if (config.dev) {
 		// Install vue dev tool and open chrome dev tools
-		const { default: installExtension, VUEJS_DEVTOOLS } = require('electron-devtools-installer')
+		const {
+			default: installExtension,
+			VUEJS_DEVTOOLS
+		} = require('electron-devtools-installer')
 		installExtension(VUEJS_DEVTOOLS.id).then(name => {
 			console.log(`Added Extension:  ${name}`)
 			win.webContents.openDevTools()
@@ -48,11 +54,17 @@ const newWin = () => {
 		// Wait for nuxt to build
 		const pollServer = () => {
 			http.get(_NUXT_URL_, (res) => {
-				if (res.statusCode === 200) { win.loadURL(_NUXT_URL_) } else { setTimeout(pollServer, 300) }
+				if (res.statusCode === 200) {
+					win.loadURL(_NUXT_URL_)
+				} else {
+					setTimeout(pollServer, 300)
+				}
 			}).on('error', pollServer)
 		}
 		pollServer()
-	} else { return win.loadURL(_NUXT_URL_) }
+	} else {
+		return win.loadURL(_NUXT_URL_)
+	}
 }
 app.on('ready', newWin)
 app.on('window-all-closed', () => app.quit())
@@ -72,23 +84,23 @@ let pyProc = null
 let pyPort = null
 
 const guessPackaged = () => {
-  const fullPath = path.join(__dirname, PY_DIST_FOLDER)
-  return require('fs').existsSync(fullPath)
+	const fullPath = path.join(__dirname, PY_DIST_FOLDER)
+	return require('fs').existsSync(fullPath)
 }
 
 const getScriptPath = () => {
-  if (!guessPackaged()) {
-    return path.join(__dirname, PY_FOLDER, PY_MODULE + '.py')
-  }
-  if (process.platform === 'win32') {
-    return path.join(__dirname, PY_DIST_FOLDER, PY_MODULE, PY_MODULE + '.exe')
-  }
-  return path.join(__dirname, PY_DIST_FOLDER, PY_MODULE, PY_MODULE)
+	if (!guessPackaged()) {
+		return path.join(__dirname, PY_FOLDER, PY_MODULE + '.py')
+	}
+	if (process.platform === 'win32') {
+		return path.join(__dirname, PY_DIST_FOLDER, PY_MODULE, PY_MODULE + '.exe')
+	}
+	return path.join(__dirname, PY_DIST_FOLDER, PY_MODULE, PY_MODULE)
 }
 
 const selectPort = () => {
-  pyPort = 4242
-  return pyPort
+	pyPort = 4242
+	return pyPort
 }
 
 // const createPyProc = () => {
@@ -100,7 +112,7 @@ const selectPort = () => {
 //   } else {
 //     pyProc = require('child_process').spawn('python', [script, port])
 //   }
- 
+
 //   if (pyProc != null) {
 //     //console.log(pyProc)
 //     console.log('child process success on port ' + port)
@@ -108,24 +120,26 @@ const selectPort = () => {
 // }
 
 const createPyExample = () => {
-  let script = path.join(__dirname, '..', 'pysrc', 'main.py')
-  let port = '' + selectPort()
+	console.log(process.env.PYTHONPATH)
+	let script = path.join(__dirname, '..', 'pyenv', 'bin', 'uvicorn')
+	let port = '' + selectPort()
 
-  console.log('child process success on port ' + port)
-    console.log('child process success on port ' + script)
+	console.log('child process success on port ' + port)
 
-  pyProc = require('child_process').spawn('python', [script])
+//	pyProc = require('child_process').spawn('ipython', [script])
+	pyProc = require('child_process').spawn('uvicorn', ['pysrc.api:app', '--reload'])
+	if (pyProc != null) {
+		// console.log(pyProc)
+	console.log('launching: ' + script)
 
-  if (pyProc != null) {
-    // console.log(pyProc)
-    console.log('child process success on port ' + script)
-  }
+		// console.log('child process success on port ' + script)
+	}
 }
 
 const exitPyProc = () => {
-  pyProc.kill()
-  pyProc = null
-  pyPort = null
+	pyProc.kill()
+	pyProc = null
+	pyPort = null
 }
 
 app.on('ready', createPyExample)

@@ -1,7 +1,7 @@
 <template>
 <v-layout class="mx-2" column  align-center >
 
-    {{progressivePath}} 
+     
     <v-card  height="100%" width="100%" :light="light"
     
     >
