@@ -1,7 +1,7 @@
 module.exports = {
 	modules: [ '@nuxtjs/axios', '@nuxtjs/vuetify'],
 	mode: 'spa',
-	head: {title: '{{name}}'}, // Headers of the page
+	head: {title: 'FileSync'}, // Headers of the page
 	loading: false, // Disable default loading bar
 	build: {
 		extend (config, { isDev, isClient }) {
