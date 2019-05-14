@@ -1,7 +1,7 @@
 <template>
 <v-layout class="mx-2" column  align-center >
 
-     
+     {{text}}
     <v-card  height="100%" width="100%" :light="light"
     
     >
@@ -68,6 +68,7 @@ export default {
   },
   data () {
     return {
+      text:'',
       open: [],
       progressivePath: [],
       Route: '',
@@ -80,12 +81,23 @@ export default {
   methods: {
     intoFolder: async function (item) {
       // eslint-disable-next-line no-undef,no-return-assign
-      eel.into_folder(String(item), this.Route)((result) => { this.origin = result['items']; this.Route = result['route']; this.progressivePath.push(this.Route) })
+      // eel.into_folder(String(item), this.Route)((result) => { this.origin = result['items']; this.Route = result['route']; this.progressivePath.push(this.Route) })
+      var result = await this.$axios.post('http://localhost:8000/into_folder/',
+      {
+        item:String(item),
+        route:this.Route
+      }
+      )
+      this.origin = result.data.items
+      this.Route = result.data.route
+      this.progressivePath.push(this.Route)
     },
     getRoute: async function () {
     //   this.progressivePath.push(this.Route)
-      // eslint-disable-next-line no-undef,no-return-assign
-      eel.get_route(this.Route)((result) => this.origin = result)
+      
+      this.origin = (await this.$axios.post('http://localhost:8000/get_route/',{
+        name:this.Route
+      })).data
     },
     goBack: async function () {
       console.log('back')

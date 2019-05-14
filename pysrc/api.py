@@ -1,26 +1,46 @@
 from fastapi import Cookie, FastAPI
-# from authentication import authenticate
-# from link_account import link_account_facebook
+from starlette.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import random
+import json
+import fs
+from fs import open_fs
+
 app = FastAPI()
+app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_methods=['*'], allow_headers=['*'])
 
+class Route(BaseModel):
+    name: str
 
+class RouteItem(BaseModel):
+    item: str
+    route:str
 @app.get("/")
 async def read_root():
     return {"Hello": "World"}
 
+@app.post("/get_route/")
+async def get_route(route: Route):
+    return return_dir_json(open_fs(route.name))
 
-@app.get("/items/{item_id}")
-async def read_item(item_id: int, q: str = None):
-    return {"item_id": item_id, "q": q}
+@app.post('/into_folder/')
+async def into_folder(item: RouteItem):
+    route = fs.path.combine(item.route, item.item)
+    
+    return {'items':return_dir_json(open_fs(route)), 'route':route}
 
 
-@app.get('/authenticate')
-async def log_in(user: str, password: str):
-    result = await authenticate(user, password)
-    return result
-
-
-@app.get('/link_account')
-async def link_fb_account(user: str, password: str):
-    result = await link_account_facebook(user, password)
-    return result
+def return_dir_json(route):
+    content_list = list(route.scandir('/'))
+    return [
+        {   'id': element.name,
+            'name': element.name,
+            'children': []
+        } for element in content_list if element.is_dir
+        #  else {
+        #     'name': element.name
+        # }
+    ] + [{
+        'id':element.name,
+        'name': element.name,
+    } for element in content_list if not element.is_dir]

@@ -49,7 +49,7 @@ const newWin = () => {
 		} = require('electron-devtools-installer')
 		installExtension(VUEJS_DEVTOOLS.id).then(name => {
 			console.log(`Added Extension:  ${name}`)
-			win.webContents.openDevTools()
+			// win.webContents.openDevTools()
 		}).catch(err => console.log('An error occurred: ', err))
 		// Wait for nuxt to build
 		const pollServer = () => {
@@ -126,7 +126,7 @@ const createPyExample = () => {
 
 	console.log('child process success on port ' + port)
 
-//	pyProc = require('child_process').spawn('ipython', [script])
+	// pyProc = require('child_process').spawn('ipython', [script])
 	pyProc = require('child_process').spawn('uvicorn', ['pysrc.api:app', '--reload'])
 	if (pyProc != null) {
 		// console.log(pyProc)
