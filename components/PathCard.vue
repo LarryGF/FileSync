@@ -1,10 +1,10 @@
 <template>
-  <v-layout class="mx-2" column align-center>
-    {{progressivePath}}
+  <v-layout class="mx-2" column align-center fill-height>
+    {{test}}{{active}}{{progressivePath}}
     <v-card height="100%" width="100%" :light="light">
       <v-card-title>
-        <v-btn fab color="pink" class="mb-4">
-          <v-icon color="white" @click.stop="goBack">arrow_back</v-icon>
+        <v-btn fab color="pink" class="mb-4" @click.stop.prevent="goBack">
+          <v-icon color="white" >arrow_back</v-icon>
         </v-btn>
         <v-spacer></v-spacer>
         <h2 class="mb-4 mx-2">{{direction.toUpperCase()}}:</h2>
@@ -55,9 +55,9 @@
 
       <v-container v-else :style="'height:'+height+'px'"></v-container>
 
-      <v-card-actions v-if="direction=='destino'" style="float">
+      <v-card-actions   v-if="direction=='destino'">
         <v-spacer></v-spacer>
-        <v-btn color="primary" top right @click="loading=!loading">Loading</v-btn>
+        <v-btn color="primary" top  @click="loading=!loading">Loading</v-btn>
       </v-card-actions>
     </v-card>
   </v-layout>
@@ -82,6 +82,7 @@ export default {
   },
   data() {
     return {
+      test:0,
       loading: false,
       open: [],
       progressivePath: [],
@@ -115,10 +116,12 @@ export default {
         }
       )).data;
     },
-    goBack: async function() {
-      console.log("back");
+    goBack: function() {
+      this.test++
+      console.log('going back')
       if (this.progressivePath.length > 1) {
         this.progressivePath.pop();
+        this.active.pop()
         this.Route = this.progressivePath[this.progressivePath.length - 1];
         this.getRoute();
         this.$forceUpdate();

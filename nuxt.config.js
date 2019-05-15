@@ -28,8 +28,8 @@ module.exports = {
 		],
 	},
 	loading: {
-		color: 'blue',
-		height: '5px'
+		color: 'white',
+		height: '8px'
 	}, // Disable default loading bar
 	build: {
 		extend(config, {
