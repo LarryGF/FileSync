@@ -63,6 +63,7 @@
         <v-spacer></v-spacer>
         <v-btn color="primary"  @click="organize">Organizar</v-btn>
       </v-card-actions>
+      
     </v-card>
   </v-layout>
 </template>
@@ -76,7 +77,8 @@ export default {
   props: {
     light: Boolean,
     direction: String,
-    height: Number
+    height: Number,
+    value: String
   },
   data() {
     return {
@@ -103,11 +105,14 @@ export default {
       );
       this.origin = result.data.items;
       this.Route = result.data.route;
+      this.$emit('change', this.Route)
+      this.$emit('input', this.Route)
       this.progressivePath.push(this.Route);
     },
     getRoute: async function() {
       //   this.progressivePath.push(this.Route)
-
+      this.$emit('change', this.Route)
+      this.$emit('input', this.Route)
       this.origin = (await this.$axios.post(
         "http://localhost:8000/get_route/",
         {
@@ -116,7 +121,8 @@ export default {
       )).data;
     },
     goBack: function() {
-      this.test++
+      this.$emit('change', this.Route)
+      this.$emit('input', this.Route)
       console.log('going back')
       if (this.progressivePath.length > 1) {
         this.progressivePath.pop();
@@ -135,7 +141,8 @@ export default {
       this.loading = false
       this.getRoute()
       console.log(result)
-    }
+    },
+    
   },
   watch: {
     active: function() {
