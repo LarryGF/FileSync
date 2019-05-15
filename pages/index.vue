@@ -2,8 +2,8 @@
 <template>
 
 <v-layout row>
-  <PathCard :light="true" direction="origen" :height="height" :key="0"/>
-  <PathCard :light="false" direction="destino" :height="height" :key="1"/>
+  <PathCard :light="false" direction="origen" :height="height" :key="0"/>
+  <PathCard :light="true" direction="destino" :height="height" :key="1"/>
   
   </v-layout>
 </template>

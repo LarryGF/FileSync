@@ -1,0 +1,3 @@
+[submodule "pysrc/fssync"]
+	path = pysrc/fssync
+	url = https://github.com/fsadannn/fssync

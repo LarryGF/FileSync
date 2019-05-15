@@ -5,6 +5,7 @@ import random
 import json
 import fs
 from fs import open_fs
+from .fssync.dsync import *
 
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_methods=['*'], allow_headers=['*'])
@@ -14,7 +15,8 @@ class Route(BaseModel):
 
 class RouteItem(BaseModel):
     item: str
-    route:str
+    route: str
+    
 @app.get("/")
 async def read_root():
     return {"Hello": "World"}

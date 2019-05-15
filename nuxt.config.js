@@ -1,8 +1,36 @@
 module.exports = {
 	modules: [ '@nuxtjs/axios', '@nuxtjs/vuetify'],
 	mode: 'spa',
-	head: {title: 'FileSync'}, // Headers of the page
-	loading: false, // Disable default loading bar
+	head: {
+		title: 'FileSync',
+		meta: [{
+			charset: 'utf-8'
+		  },
+		  {
+			name: 'viewport',
+			content: 'width=device-width, initial-scale=1'
+		  },
+		  {
+			hid: 'description',
+			name: 'description',
+			content: 'Nuxt.js + Vuetify.js project'
+		  }
+		  ],
+		  link: [{
+			rel: 'icon',
+			type: 'image/x-icon',
+			href: '/favicon.ico'
+		  },
+		  {
+			rel: 'stylesheet',
+			href: 'material.css'
+		  }
+		  ],
+},
+	loading: {
+		color: 'blue',
+		height: '5px'
+	  }, // Disable default loading bar
 	build: {
 		extend (config, { isDev, isClient }) {
 			if (isDev && isClient) {
