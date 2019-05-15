@@ -10,6 +10,12 @@ from .fssync.dsync import *
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_methods=['*'], allow_headers=['*'])
 
+matcher = {
+    'seriePersona':PSERIE,
+    'anime':ANIME,
+    'pelicula':MOVIE
+}
+
 class Route(BaseModel):
     name: str
 
@@ -20,6 +26,12 @@ class RouteType(BaseModel):
     route: str
     type: str
 
+class MoveType(BaseModel):
+    source: str
+    destination: str
+    type: str
+
+    
 @app.get("/")
 async def read_root():
     return {"Hello": "World"}
@@ -42,15 +54,19 @@ async def organize_path(info: RouteType):
         # series = SeriesPerson(fs_source, fs_destination)
         # series = series.organize()
         # series.sync()
-        matcher = {
-            'Series':PSERIE,
-            'Animes':ANIME,
-            'Películas':MOVIE
-        }
+
+        print(info)
         await organize(info.route,matcher[info.type])
         return True
     except Exception as e:
         return e
+
+@app.post('/move/')
+async def move(info: MoveType):
+    
+    print(info)
+    sync(info.source, info.destination, matcher[info.type])
+    return True
 
 def return_dir_json(route):
     content_list = list(route.scandir('/'))
