@@ -1,5 +1,6 @@
 <template>
   <v-layout class="mx-2" column align-center>
+    {{progressivePath}}
     <v-card height="100%" width="100%" :light="light">
       <v-card-title>
         <v-btn fab color="pink" class="mb-4">
@@ -19,37 +20,45 @@
         </v-flex>
         <v-spacer></v-spacer>
       </v-card-title>
-      <v-container class="scroll-y py-0 pl-0" :style="'max-height:'+height+'px'">
-      <LoadingOverlay v-if="loading" :height="height"/>
-        <v-card-text>
-          <v-treeview
-            hoverable
-            :active.sync="active"
-            :items="origin"
-            :open.sync="open"
-            activatable
-            active-class="primary--text"
-            transition
-          >
-            <v-icon
-              v-if="item.children"
-              slot="prepend"
-              slot-scope="{ item, active }"
-              :color="active ? 'primary' : ''"
-            >folder</v-icon>
-            <v-icon
-              v-else
-              slot="prepend"
-              slot-scope="{ item, active }"
-              :color="active ? 'primary' : ''"
-            >assignment</v-icon>
-          </v-treeview>
-        </v-card-text>
+      
+      <v-container
+        class="scroll-y py-0 px-0"
+        :style="'height:'+height+'px'"
+        v-if="origin.length!=0"
+      >
+        <LoadingOverlay v-if="loading" :height="height"/>
+
+        <v-treeview
+          hoverable
+          :active.sync="active"
+          :items="origin"
+          :open.sync="open"
+          activatable
+          active-class="primary--text"
+          transition
+        >
+          <v-icon
+            v-if="item.children"
+            slot="prepend"
+            slot-scope="{ item, active }"
+            :color="active ? 'primary' : ''"
+          >folder</v-icon>
+          <v-icon
+            v-else
+            slot="prepend"
+            slot-scope="{ item, active }"
+            :color="active ? 'primary' : ''"
+          >assignment</v-icon>
+        </v-treeview>
       </v-container>
-        <v-card-actions>
-          
-          <v-btn @click="loading=!loading">Loading</v-btn>
-        </v-card-actions>
+
+
+      <v-container v-else :style="'height:'+height+'px'"></v-container>
+
+      <v-card-actions v-if="direction=='destino'" style="float">
+        <v-spacer></v-spacer>
+        <v-btn color="primary" top right @click="loading=!loading">Loading</v-btn>
+      </v-card-actions>
     </v-card>
   </v-layout>
 </template>
@@ -63,7 +72,7 @@
 </style>
 
 <script>
-import LoadingOverlay from '../components/LoadingOverlay'
+import LoadingOverlay from "../components/LoadingOverlay";
 export default {
   name: "PathCard",
   props: {
@@ -123,7 +132,7 @@ export default {
       }
     }
   },
-  components:{
+  components: {
     LoadingOverlay
   }
 };
