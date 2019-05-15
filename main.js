@@ -120,27 +120,38 @@ const selectPort = () => {
 // }
 
 const createPyExample = () => {
-	console.log(process.env.PYTHONPATH)
-	let script = path.join(__dirname, '..', 'pyenv', 'bin', 'uvicorn')
+	let home = path.join(__dirname, '..', 'pyenv')
+	let boot = path.join(__dirname, '..', 'boot.sh')
+	let python_path = path.join(home, 'bin', 'python')
+
+	if (process.platform === 'win32') {
+		boot = path.join(__dirname, '..', 'boot.bat')
+		python_path += '.exe'
+
+	}
+	process.env.PYTHONHOME = home
+	let uvicorn = path.join(home, 'bin', 'uvicorn')
 	let port = '' + selectPort()
 
-	console.log('child process success on port ' + port)
+	console.log(home)
+	console.log(python_path)
+	console.log(uvicorn)
 
-	// pyProc = require('child_process').spawn('ipython', [script])
-	pyProc = require('child_process').spawn('uvicorn', ['pysrc.api:app', '--reload'])
+	pyProc = require('child_process').spawn(boot, [], {detached: true})
+
 	if (pyProc != null) {
 		// console.log(pyProc)
-	console.log('launching: ' + script)
-
-		// console.log('child process success on port ' + script)
+		console.log('child process success on port ' + boot)
 	}
 }
 
 const exitPyProc = () => {
-	pyProc.kill()
+	// pyProc.kill()
+	process.kill(-pyProc.pid)
 	pyProc = null
 	pyPort = null
 }
-
-app.on('ready', createPyExample)
-app.on('will-quit', exitPyProc)
+if (!config.dev) {
+	app.on('ready', createPyExample)
+	app.on('will-quit', exitPyProc)
+}
