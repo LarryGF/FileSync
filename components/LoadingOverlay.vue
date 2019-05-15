@@ -18,3 +18,10 @@ export default {
 }
 </script>
 
+<style>
+.transparent {
+  background-color: white !important;
+  opacity: 0.65;
+  border-color: transparent !important;
+}
+</style>

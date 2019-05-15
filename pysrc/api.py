@@ -16,7 +16,10 @@ class Route(BaseModel):
 class RouteItem(BaseModel):
     item: str
     route: str
-    
+class RouteType(BaseModel):
+    route: str
+    type: str
+
 @app.get("/")
 async def read_root():
     return {"Hello": "World"}
@@ -31,6 +34,23 @@ async def into_folder(item: RouteItem):
     
     return {'items':return_dir_json(open_fs(route)), 'route':route}
 
+@app.post('/organize/')
+async def organize_path(info: RouteType):
+    try:
+        # fs_source = open_fs(info.item)
+        # fs_destination = open_fs(info.route)
+        # series = SeriesPerson(fs_source, fs_destination)
+        # series = series.organize()
+        # series.sync()
+        matcher = {
+            'Series':PSERIE,
+            'Animes':ANIME,
+            'Películas':MOVIE
+        }
+        await organize(info.route,matcher[info.type])
+        return True
+    except Exception as e:
+        return e
 
 def return_dir_json(route):
     content_list = list(route.scandir('/'))

@@ -1,6 +1,5 @@
 <template>
   <v-layout class="mx-2" column align-center fill-height>
-    {{test}}{{active}}{{progressivePath}}
     <v-card height="100%" width="100%" :light="light">
       <v-card-title>
         <v-btn fab color="pink" class="mb-4" @click.stop.prevent="goBack">
@@ -55,21 +54,20 @@
 
       <v-container v-else :style="'height:'+height+'px'"></v-container>
 
-      <v-card-actions   v-if="direction=='destino'">
+      <v-card-actions   v-if="direction=='destino'" class="pt-3">
+        <v-radio-group top v-model="type" row color="purple" height="10" class="mt-3">
+      <v-radio label="Series" value="seriePersona"></v-radio>
+      <v-radio label="Animes" value="anime"></v-radio>
+      <v-radio label="Películas" value="pelicula"></v-radio>
+    </v-radio-group>
         <v-spacer></v-spacer>
-        <v-btn color="primary" top  @click="loading=!loading">Loading</v-btn>
+        <v-btn color="primary"  @click="organize">Organizar</v-btn>
       </v-card-actions>
     </v-card>
   </v-layout>
 </template>
 
-<style>
-.transparent {
-  background-color: white !important;
-  opacity: 0.65;
-  border-color: transparent !important;
-}
-</style>
+
 
 <script>
 import LoadingOverlay from "../components/LoadingOverlay";
@@ -82,6 +80,7 @@ export default {
   },
   data() {
     return {
+      type:'seriePersona',
       test:0,
       loading: false,
       open: [],
@@ -126,6 +125,16 @@ export default {
         this.getRoute();
         this.$forceUpdate();
       }
+    },
+    organize: async function(){
+      this.loading = true
+      var result = (await this.$axios.post("http://localhost:8000/organize/",{
+        route:this.Route,
+        type:this.type
+      })).data
+      this.loading = false
+      this.getRoute()
+      console.log(result)
     }
   },
   watch: {
