@@ -1,0 +1,7 @@
+
+Todo:
+  ✔ Compilar en Winodws @done(19-05-16 13:19)
+  ☐ Corregir css en Windows, no se ve bien
+  ☐ Actualizar la vista destino luego de mover
+  ☐ Revisar si se puede ocultar la consola con el server
+  ☐ Ofuscar los codigos, preferibvlemente con pyarmor

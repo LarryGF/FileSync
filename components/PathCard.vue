@@ -19,7 +19,7 @@
         </v-flex>
         <v-spacer></v-spacer>
       </v-card-title>
-      
+
       <v-container
         class="scroll-y py-0 px-0"
         :style="'height:'+height+'px'"
@@ -63,7 +63,7 @@
         <v-spacer></v-spacer>
         <v-btn color="primary"  @click="organize">Organizar</v-btn>
       </v-card-actions>
-      
+
     </v-card>
   </v-layout>
 </template>

@@ -22,6 +22,7 @@ class Route(BaseModel):
 class RouteItem(BaseModel):
     item: str
     route: str
+
 class RouteType(BaseModel):
     route: str
     type: str
@@ -31,7 +32,7 @@ class MoveType(BaseModel):
     destination: str
     type: str
 
-    
+
 @app.get("/")
 async def read_root():
     return {"Hello": "World"}
@@ -43,7 +44,7 @@ async def get_route(route: Route):
 @app.post('/into_folder/')
 async def into_folder(item: RouteItem):
     route = fs.path.combine(item.route, item.item)
-    
+
     return {'items':return_dir_json(open_fs(route)), 'route':route}
 
 @app.post('/organize/')
@@ -63,7 +64,7 @@ async def organize_path(info: RouteType):
 
 @app.post('/move/')
 async def move(info: MoveType):
-    
+
     print(info)
     sync(info.source, info.destination, matcher[info.type])
     return True
