@@ -14,7 +14,10 @@
             "./pysrc",
             "./pyenv",
             "./boot.sh",
-            "./boot.bat"
+            "./boot.bat",
+            "./SilentCMD.exe",
+            "./run.bat",
+            "./kill.bat"
         ]
     },
     "scripts": {
@@ -26,6 +29,7 @@
     "dependencies": {
         "@nuxtjs/axios": "^5.4.1",
         "@nuxtjs/vuetify": "^0.5.5",
+        "material-design-icons-iconfont": "^5.0.1",
         "nuxt": "^1.4.0",
         "vuetify-loader": "^1.2.2"
     },
