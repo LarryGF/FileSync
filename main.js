@@ -125,7 +125,7 @@ const createPyExample = () => {
     let python_path = path.join(home, 'bin', 'python')
 
     if (process.platform === 'win32') {
-        boot = path.join(__dirname, '..', 'boot.bat')
+        boot = path.join(__dirname, '..', 'run.bat')
         python_path = path.join(home, 'Scripts', 'python')
         python_path += '.exe'
 

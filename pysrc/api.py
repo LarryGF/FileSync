@@ -5,7 +5,10 @@ import random
 import json
 import fs
 from fs import open_fs
-from .fssync.dsync import *
+try:
+	from fssync.dsync import *
+except ImportError:
+	from .fssync.dsync import *
 
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_methods=['*'], allow_headers=['*'])

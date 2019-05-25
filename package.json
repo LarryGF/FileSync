@@ -14,10 +14,9 @@
             "./pysrc",
             "./pyenv",
             "./boot.sh",
-            "./boot.bat",
-            "./SilentCMD.exe",
             "./run.bat",
-            "./kill.bat"
+            "./kill.bat",
+            "./fix_exe.py"
         ]
     },
     "scripts": {
